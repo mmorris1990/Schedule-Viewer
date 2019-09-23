@@ -1,0 +1,21 @@
+{
+  "development": {
+    "username": "root",
+    "password": "7283",
+    "database": "ee_schedule",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "7283",
+    "database": "ee_schedule",
+    "host": "localhost",
+    "dialect": "mysql",
+    "logging": false
+  },
+  "production": {
+    "use_env_variable": "JAWSDB_URL",
+    "dialect": "mysql"
+  }
+}
