@@ -1,4 +1,5 @@
-var db = require("../models");
+const db = require("../models");
+const moment = require("moment");
 
 module.exports = function (app) {
   // GET Today's scheduled jobs
