@@ -16,7 +16,7 @@ console.log("TOMORROW'S DUE DATE = " +tomorrow);
 let week = [1, 2, 3, 4, 5, 6, 7];
 
 let dates = week.map(getDates => {
-    dueDates = moment().add(getDates, "days").format("M/D");
+    let dueDates = moment().add(getDates, "days").format("M/D");
 
     return dueDates;
 });
