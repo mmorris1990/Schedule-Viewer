@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
-
 const db = require("./models");
+const Sequelize = require('sequelize');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,7 +13,6 @@ app.use(express.static("public"));
 
 // Routes
 require("./routes/apiRoutes")(app);
-require("./routes/htmlRoutes")(app);
 
 const syncOptions = { force: false };
 
@@ -23,9 +22,26 @@ if (process.env.NODE_ENV === "test") {
   syncOptions.force = true;
 }
 
+
+// Create instance of Sequelize
+const sequelize = new Sequelize('ee_schedule', 'root', '7283', {
+  host: 'localhost',
+  dialect: 'mysql'
+});
+
+// Testing Sequelize connection
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+
 // Starting the server, syncing our models ------------------------------------/
-db.sequelize.sync(syncOptions).then(function() {
-  app.listen(PORT, function() {
+db.sequelize.sync(syncOptions).then(function () {
+  app.listen(PORT, function () {
     console.log(
       "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
       PORT,

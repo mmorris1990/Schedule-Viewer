@@ -2,30 +2,35 @@ const db = require("../models");
 const moment = require("moment");
 
 module.exports = function (app) {
-  // GET Today's scheduled jobs
-  app.get("/api/schedule/:today", function (req, res) {
-    db.sequelize.query("SELECT salesOrder, company, dateNotes, dateDue, shipping FROM schedules WHERE dateDue = '" + req.params.today + "'"
-      // DUE DATE = TODAY
-      ,
-      { type: db.Sequelize.QueryTypes.SELECT })
+  // GET Today's or Tomorrow's scheduled jobs
+  app.get("/api/schedule/:date", function (req, res) {
+    // Replace '-' with '/' in order to get route and query into correct formats
+    let dateFormatted = req.params.date.replace("-", "/");
+    db.sequelize.query("SELECT salesOrder, company, dateNotes, dateDue, shipping FROM schedules WHERE dateDue = '" + dateFormatted + "'", { type: db.Sequelize.QueryTypes.SELECT })
       .then(function (dbSchedule) {
         res.json(dbSchedule);
       });
   });
 
-  // GET Tomorrows's scheduled jobs
-  app.get("/api/schedule/:tomorrow", function (req, res) {
-    db.sequelize.query("SELECT salesOrder, company, dateNotes, dateDue, shipping FROM schedules WHERE dateDue = '" + req.params.tomorrow + "'"
-      // DUE DATE = TOMORROW
-      ,
-      { type: db.Sequelize.QueryTypes.SELECT })
-      .then(function (dbSchedule) {
-        res.json(dbSchedule);
-      });
-  });
+  // SEQUELIZE METHOD NOT WORKING?? ----------------------------------
+  // app.get("api/schedule/:today", (req, res) => {
+  //   console.log("hi");
+  //   let date = req.params.today.replace("-", "/");
+  //   db.Schedule.findAll({
+  //     attributes: ["salesOrder", "company", "dateNotes", "dateDue", "shipping"],
+  //     where: { dateDue: date }
+  //   })
+  //     .then(dbSchedule => {
+  //       res.json(dbSchedule);
+  //     })
+  //     .catch(err => {
+  //       throw err;
+  //     })
+  // });
 
-  // GET the next Week's scheduled jobs
-  app.get("/api/schedule/:week", function (req, res) {
+  //------------------------------ FIX ME ------------------------------------
+  // // GET the next Week's scheduled jobs
+  app.get("/api/schedule/week/:date", function (req, res) {
     db.sequelize.query("SELECT salesOrder, company, dateNotes, dateDue, shipping FROM schedules WHERE dateDue = '" + req.params.week + "'"
       // DUE DATE = TODAY + 7 DAYS
       ,
@@ -36,44 +41,34 @@ module.exports = function (app) {
   });
 
   // GET all tasks by user
-  app.get("/api/task/task", function (req, res) {
-    db.sequelize.query("SELECT name, dueDate, description FROM tasks WHERE UserId = '" + req.user.id + " AND type = task", { type: db.Sequelize.QueryTypes.SELECT })
+  app.get("/api/task/task/:id", function (req, res) {
+    //------------------------- Change req.user.id to req.user.id once passport is up
+    db.sequelize.query("SELECT name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'task'", { type: db.Sequelize.QueryTypes.SELECT })
       .then(function (dbSchedule) {
         res.json(dbSchedule);
       });
   });
 
   // GET all projects by user
-  app.get("/api/task/project", function (req, res) {
-    db.sequelize.query("SELECT name, dueDate, description FROM tasks WHERE UserId = '" + req.user.id + " AND type = project", { type: db.Sequelize.QueryTypes.SELECT })
+  app.get("/api/task/project/:id", function (req, res) {
+    //------------------------- Change req.user.id to req.user.id once passport is up
+    db.sequelize.query("SELECT name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'project'", { type: db.Sequelize.QueryTypes.SELECT })
       .then(function (dbSchedule) {
         res.json(dbSchedule);
       });
   });
 
   // UPDATE task by task id
-  app.put("/api/task/task", function (req, res) {
-    db.Task.update(req.body,
-      {
-        where: {
-          id: req.body.id
-        }
-      })
-      //------------ NEED TO ADD VALIDATION WHERE USER CAN ONLY UPDATE THEIR TASKS --------------
-      .then(function (dbTask) {
-        res.json(dbTask);
-      });
-  });
-
-  // UPDATE project by task id
-  app.put("/api/task/project", function (req, res) {
-    db.Task.update(req.body,
-      {
-        where: {
-          id: req.body.id
-        }
-      })
-      //------------ NEED TO ADD VALIDATION WHERE USER CAN ONLY UPDATE THEIR PROJECTS --------------
+  app.put("/api/task/task/:id", function (req, res) {
+    console.log(req.body);
+    db.Task.update({
+      name: req.body.name,
+      dueDate: req.body.dueDate,
+      description: req.body.description
+    }, {
+      where: { id: req.params.id }
+    })
+      //------------ NEED TO ADD VALIDATION WHERE USER CAN ONLY UPDATE -THEIR- TASKS --------------
       .then(function (dbTask) {
         res.json(dbTask);
       });
@@ -87,7 +82,8 @@ module.exports = function (app) {
       dueDate: req.body.dueDate,
       description: req.body.description,
       type: "task",
-      UserId: req.user.id
+      //------------------------- Change req.user.id to req.user.id once passport is up
+      UserId: req.body.UserId
     })
       .then(function (dbTask) {
         res.json(dbTask);
@@ -102,14 +98,15 @@ module.exports = function (app) {
       dueDate: req.body.dueDate,
       description: req.body.description,
       type: "project",
-      UserId: req.user.id
+      //------------------------- Change req.user.id to req.user.id once passport is up
+      UserId: req.body.UserId
     })
       .then(function (dbTask) {
         res.json(dbTask);
       });
   });
 
-  // DELETE a task by id
+  // DELETE a task/project by id
   app.delete("/api/task/:id", function (req, res) {
     db.Task.destroy({ where: { id: req.params.id } })
       .then(function (dbTask) {

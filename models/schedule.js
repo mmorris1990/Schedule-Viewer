@@ -1,12 +1,7 @@
+const Sequelize = require("sequelize");
+
 module.exports = function (sequelize, DataTypes) {
     const Schedule = sequelize.define("Schedule", {
-    //    Is this necessary for table data import wizard?
-        id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        // ------------------------
         salesOrder: DataTypes.STRING,
         company: DataTypes.STRING,
         contact: DataTypes.STRING,
@@ -21,16 +16,8 @@ module.exports = function (sequelize, DataTypes) {
         dateDue: DataTypes.STRING,
         shipping: DataTypes.STRING,
         description: DataTypes.STRING,
-        // need to fix for table data import wizard
-        createdAt: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW
-        },
-        updatedAt: {
-            type: DataTypes.DATE,
-            defaultValue: DataTypes.NOW
-        }
-        // -----------------------------
+        createdAt: Sequelize.DATE,
+        updatedAt: Sequelize.DATE
     });
     return Schedule;
 };
