@@ -88,7 +88,7 @@ module.exports = function (app) {
 
 
   // UPDATE task by task id
-  app.put("/api/task/task/:id", function (req, res) {
+  app.put("/api/task/:id", function (req, res) {
     console.log(req.body);
     db.Task.update({
       name: req.body.name,
