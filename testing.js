@@ -1,3 +1,5 @@
+// DELETE ME BEFORE DEPLOYING-------------------------------------------------------
+
 const moment = require("moment");
 
 // Today's due date
