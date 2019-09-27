@@ -21,8 +21,10 @@
     "axios": "^0.19.0",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
+    "googleapis": "^39.2.0",
     "moment": "^2.24.0",
     "mysql2": "^1.7.0",
+    "nodemon": "^1.19.2",
     "sequelize": "^5.19.0"
   }
 }
