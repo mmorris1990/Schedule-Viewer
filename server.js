@@ -30,6 +30,8 @@ db.sequelize.sync({ force: false }).then(function () {
   });
 });
 
+module.exports = app;
+
 
 // require("dotenv").config();
 // const express = require("express");
