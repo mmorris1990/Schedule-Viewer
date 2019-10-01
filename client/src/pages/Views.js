@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
+const moment = require("moment");
 
 class Views extends Component {
     state = {
@@ -18,7 +19,8 @@ class Views extends Component {
     };
 
     loadJobs = () => {
-        API.getJobs()
+        console.log("loadJobs");
+        API.getJobs(moment().format("M-D"))
             .then(res =>
                 this.setState({ jobs: res.data }))
             .catch(err =>
@@ -26,7 +28,7 @@ class Views extends Component {
     };
 
     loadTasks = () => {
-        API.getTasks()
+        API.getTasks("/1")
             .then(res =>
                 this.setState({ tasks: res.data }))
             .catch(err =>
