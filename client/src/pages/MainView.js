@@ -7,7 +7,7 @@ import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
 const moment = require("moment");
 
-class Views extends Component {
+class MainView extends Component {
     state = {
         todayJobs: [],
         tomorrowJobs: [],
@@ -116,4 +116,4 @@ class Views extends Component {
     }
 };
 
-export default Views;
+export default MainView;
