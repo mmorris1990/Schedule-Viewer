@@ -1,13 +1,25 @@
+require("dotenv");
 const express = require("express");
 const path = require("path");
 const db = require("./models")
 const PORT = process.env.PORT || 3001;
 const app = express();
-require("dotenv");
+const passport = require("passport");
+var session = require('express-session');
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+require("./config/passport")(passport);
+
+app.use(session({
+  secret: 'some-secret',
+  resave: true,
+  saveUninitialized: true
+})); // session secret
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
@@ -15,7 +27,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Define API routes here
-require('./routes/api/routes')(app);
+require('./routes/api/routes')(app, passport);
 
 // Send every other request to the React app
 // Define any API routes before this runs

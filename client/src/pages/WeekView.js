@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
+import Nav from "../components/Nav/Nav";
 const moment = require("moment");
 
 class WeekView extends Component {
@@ -16,6 +17,7 @@ class WeekView extends Component {
     componentDidMount() {
         this.loadJobs();
         this.loadTasks();
+        this.pageRedirect();
     };
 
     loadJobs = () => {
@@ -34,56 +36,66 @@ class WeekView extends Component {
                 console.log(err));
     };
 
+    pageRedirect = () => {
+        const timer = setTimeout(() => {
+            window.location = "http://localhost:3000/schedule";
+        }, 4000);
+        return () => clearTimeout(timer);
+    };
+
     render() {
         return (
-            <Container>
-                <Row>
-                    <Col size="md-9">
-                        <Row>
-                            <Jumbotron>
-                                <h1>Jobs Due This Week</h1>
-                            </Jumbotron>
-                            {this.state.weekJobs.length ? (
-                                <List>
-                                    {this.state.weekJobs.map(jobs => {
-                                        return <ListItem>
-                                            <h3>SO# {jobs.salesOrder}
-                                                {" " + jobs.company}</h3><br></br>
-                                            <h4>{" Due: " + jobs.dateDue}
-                                                {" --- " + jobs.dateNotes}
-                                                {" " + jobs.shipping}</h4>
-                                        </ListItem>
-                                    })}
-                                </List>
-                            ) : (
-                                    <h3>No Results to Display</h3>
-                                )}
-                        </Row>
-                    </Col>
+            <div>
+                <Nav />
+                <Container>
+                    <Row>
+                        <Col size="md-9">
+                            <Row>
+                                <Jumbotron>
+                                    <h1>Jobs Due This Week</h1>
+                                </Jumbotron>
+                                {this.state.weekJobs.length ? (
+                                    <List>
+                                        {this.state.weekJobs.map(jobs => {
+                                            return <ListItem>
+                                                <h3>SO# {jobs.salesOrder}
+                                                    {" " + jobs.company}</h3><br></br>
+                                                <h4>{" Due: " + jobs.dateDue}
+                                                    {" --- " + jobs.dateNotes}
+                                                    {" " + jobs.shipping}</h4>
+                                            </ListItem>
+                                        })}
+                                    </List>
+                                ) : (
+                                        <h3>No Results to Display</h3>
+                                    )}
+                            </Row>
+                        </Col>
 
-                    <Col size="md-3">
-                        <Row>
-                            <Jumbotron>
-                                <h1>Tasks</h1>
-                            </Jumbotron>
-                            {this.state.tasks.length ? (
-                                <List>
-                                    {this.state.tasks.map(tasks => {
-                                        return <ListItem>
-                                            <h2 className="taskName">{tasks.name}</h2>
-                                            <h3 className="taskDescription">{"  " + tasks.description}</h3> <br></br>
-                                            {"  Due: " + tasks.dueDate}
-                                        </ListItem>
-                                    })}
-                                </List>
-                            ) : (
-                                    <h3>No Results to Display</h3>
-                                )}
-                        </Row>
+                        <Col size="md-3">
+                            <Row>
+                                <Jumbotron>
+                                    <h1>Tasks</h1>
+                                </Jumbotron>
+                                {this.state.tasks.length ? (
+                                    <List>
+                                        {this.state.tasks.map(tasks => {
+                                            return <ListItem>
+                                                <h2 className="taskName">{tasks.name}</h2>
+                                                <h3 className="taskDescription">{"  " + tasks.description}</h3> <br></br>
+                                                {"  Due: " + tasks.dueDate}
+                                            </ListItem>
+                                        })}
+                                    </List>
+                                ) : (
+                                        <h3>No Results to Display</h3>
+                                    )}
+                            </Row>
 
-                    </Col>
-                </Row>
-            </Container>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         );
     }
 };
