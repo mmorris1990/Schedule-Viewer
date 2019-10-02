@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import Axios from "axios";
 import { Redirect, NavLink } from "react-router-dom";
-import { Col, Row, Container } from "../components/Grid";
+import "./login.css"
 
-class Login extends Component {
+class Login extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -19,54 +19,63 @@ class Login extends Component {
         });
     };
 
-    render() {
-        return (
-            <Container>
-
-                <Row>
-                    <Col size="md-3">
-
-                    </Col>
-
-                    <Col size="md-6">
-                        <h1 style={{ textAlign: "center" }}>Finishing Bae's Super Special Schedule System</h1>
-                        <form action="/login" method="post" >
-                            <h2 className="signIn">Sign In</h2>
-                            <div className="input-group mb-3">
-                                <div className="input-group-append">
-                                    <span className="input-group-text"><i className="fas fa-user"></i></span>
-                                </div>
-                                <input type="text" name="username" className="form-control input_user" value={this.state.username} onChange={this.handleChange} placeholder="username" />
-                            </div>
-                            <div className="input-group mb-2">
-                                <div className="input-group-append">
-                                    <span className="input-group-text"><i className="fas fa-key"></i></span>
-                                </div>
-                                <input type="password" name="password" className="form-control input_pass" value={this.state.password} onChange={this.handleChange}
-                                    placeholder="password" />
-                            </div>
-                            <div className="form-group">
-                                <div className="custom-control custom-checkbox">
-                                    <input type="checkbox" className="custom-control-input" id="customControlInline" />
-                                    <label className="custom-control-label" for="customControlInline">Remember me</label>
-                                </div>
-                            </div>
-                            <div className="d-flex justify-content-center mt-3 login_container">
-                                <button type="submit" name="button" className="btn login_btn">Login</button>
-                            </div>
-                            <div className="d-flex justify-content-center mt-3 login_container">
-                                <button type="submit" name="button" className="btn login_btn">Signup</button>
-                            </div>
-                        </form>
-                    </Col>
-
-                    <Col size="md-3">
-
-                    </Col>
-                </Row>
-            </Container >
-        )
+    loginUser = (event) => {
+        event.preventDefault();
+        Axios.post("/loginUser", {
+            username: this.state.username,
+            password: this.state.password,
+        }).then((res) => {
+            localStorage.setItem('JWT', res.data.token);
+            this.setState({ loggedIn: true })
+            console.log("logged in")
+        }).catch((err) => {
+            console.log(err)
+        })
     }
-};
+
+    googleLogin = (event) => {
+        event.preventDefault();
+        Axios.get("/auth/google").then(res => {
+            console.log(res)
+        })
+    }
+
+    render() {
+        if (!this.state.loggedIn) {
+            return <div className="container">
+                <form>
+                    <div class="form-group">
+                        Username: <input type="text" class="form-control" name="username" value={this.state.username} onChange={this.handleChange} />
+                    </div>
+                    <div class="form-group">
+                        Password: <input type="password" class="form-control" name="password" value={this.state.password} onChange={this.handleChange} />
+                    </div>
+                    <button type="submit" class="btn btn-success" onClick={this.loginUser}>Login</button>
+                    <NavLink to="/signup"> Signup </NavLink>
+                </form>
+                <div className="google-btn-container">
+                    <a href="/auth/google">
+                        <div className="google-btn">
+                            <div className="google-icon-wrapper">
+                                <img
+                                    className="google-icon"
+                                    src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                                    alt="signin"
+                                />
+                            </div>
+                            <p className="btn-text">
+                                <b>Log in with Google</b>
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+        else {
+            return <Redirect to={{ pathname: "/schedule", state: { loggedIn: true } }} />
+        }
+    }
+
+}
 
 export default Login;
