@@ -9,7 +9,8 @@ const moment = require("moment");
 
 class Views extends Component {
     state = {
-        jobs: [],
+        todayJobs: [],
+        tomorrowJobs: [],
         tasks: []
     };
 
@@ -19,10 +20,14 @@ class Views extends Component {
     };
 
     loadJobs = () => {
-        console.log("loadJobs");
         API.getJobs(moment().format("M-D"))
             .then(res =>
-                this.setState({ jobs: res.data }))
+                this.setState({ todayJobs: res.data }))
+            .catch(err =>
+                console.log(err));
+        API.getJobs(moment().add(1, "days").format("M-D"))
+            .then(res =>
+                this.setState({ tomorrowJobs: res.data }))
             .catch(err =>
                 console.log(err));
     };
@@ -39,37 +44,69 @@ class Views extends Component {
         return (
             <Container>
                 <Row>
-                    <Col size="md-8">
+                    <Col size="md-9">
                         <Row>
                             <Jumbotron>
                                 <h1>Jobs Due Today</h1>
                             </Jumbotron>
-                            {this.state.jobs.length ? (
+                            {this.state.todayJobs.length ? (
                                 <List>
-                                    {this.state.jobs.map(jobs => {
-                                        <ListItem>
-                                            {jobs}
+                                    {this.state.todayJobs.map(jobs => {
+                                        return <ListItem>
+                                            <h3>SO# {jobs.salesOrder}
+                                                {" " + jobs.company}</h3><br></br>
+                                            <h4>{" Due: " + jobs.dateDue}
+                                                {" --- " + jobs.dateNotes}
+                                                {" " + jobs.shipping}</h4>
                                         </ListItem>
                                     })}
                                 </List>
                             ) : (
-                                <h3> No Jobs Due Today </h3>
-                            )}
+                                    <h3>No Results to Display</h3>
+                                )}
                         </Row>
-                        
+
                         <Row>
                             <Jumbotron>
                                 <h1> Jobs Due Tomorrow </h1>
                             </Jumbotron>
+                            {this.state.tomorrowJobs.length ? (
+                                <List>
+                                    {this.state.tomorrowJobs.map(jobs => {
+                                        return <ListItem>
+                                            <h3>SO# {jobs.salesOrder}
+                                                {" " + jobs.company}</h3><br></br>
+                                            <h4>{" Due: " + jobs.dateDue}
+                                                {" --- " + jobs.dateNotes}
+                                                {" " + jobs.shipping}</h4>
+                                        </ListItem>
+                                    })}
+                                </List>
+                            ) : (
+                                    <h3>No Results to Display</h3>
+                                )}
                         </Row>
 
                     </Col>
 
-                    <Col size="md-4">
+                    <Col size="md-3">
                         <Row>
                             <Jumbotron>
                                 <h1>Tasks</h1>
                             </Jumbotron>
+                            {this.state.tasks.length ? (
+                                <List>
+                                    {this.state.tasks.map(tasks => {
+                                        return <ListItem>
+                                            <h2 className="taskName">{tasks.name}</h2>
+                                            <h3 className="taskDescription">{"  " + tasks.description}</h3> <br></br>
+                                            {"  Due: " + tasks.dueDate}
+                                        </ListItem>
+                                    })}
+                                </List>
+                            ) : (
+                                    <h3>No Results to Display</h3>
+                                )}
                         </Row>
 
                     </Col>
