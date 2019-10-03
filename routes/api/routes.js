@@ -1,7 +1,7 @@
 const db = require("../../models");
 const moment = require("moment");
 
-module.exports = function (app) {
+module.exports = function (app, passport) {
   //------------------------------ FIX ME ------------------------------------
   // // GET the next Week's scheduled jobs
   app.get("/api/schedule/week/", function (req, res) {
@@ -161,7 +161,27 @@ module.exports = function (app) {
       });
   });
 
-  // GET User information
+  // process the login form
+  app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/schedule', // redirect to the secure profile section
+    failureRedirect: '/login', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+  }),
+    function (req, res) {
+      console.log("hello");
 
-  // CREATE a new user
+      if (req.body.remember) {
+        req.session.cookie.maxAge = 1000 * 60 * 3;
+      } else {
+        req.session.cookie.expires = false;
+      }
+      res.redirect('/');
+    });
+
+  // process the signup form
+  app.post('/signup', passport.authenticate('local-signup', {
+    successRedirect: '/', // redirect to the secure profile section
+    failureRedirect: '/signup', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+  }));
 };
