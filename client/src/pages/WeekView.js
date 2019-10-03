@@ -16,6 +16,7 @@ class WeekView extends Component {
     componentDidMount() {
         this.loadJobs();
         this.loadTasks();
+        this.pageRedirect();
     };
 
     loadJobs = () => {
@@ -34,6 +35,13 @@ class WeekView extends Component {
                 console.log(err));
     };
 
+    pageRedirect = () => {
+        const timer = setTimeout(() => {
+            window.location = "http://localhost:3000/schedule";
+        }, 7000);
+        return () => clearTimeout(timer);
+    };
+
     render() {
         return (
             <Container>
@@ -41,17 +49,17 @@ class WeekView extends Component {
                     <Col size="md-9">
                         <Row>
                             <Jumbotron>
-                                <h1>Jobs Due This Week</h1>
+                                <h2>Jobs Due This Week</h2>
                             </Jumbotron>
                             {this.state.weekJobs.length ? (
                                 <List>
                                     {this.state.weekJobs.map(jobs => {
                                         return <ListItem>
-                                            <h3>SO# {jobs.salesOrder}
-                                                {" " + jobs.company}</h3><br></br>
-                                            <h4>{" Due: " + jobs.dateDue}
+                                            <h4>SO# {jobs.salesOrder}
+                                                {" " + jobs.company}</h4><br></br>
+                                            <h5>{" Due: " + jobs.dateDue}
                                                 {" --- " + jobs.dateNotes}
-                                                {" " + jobs.shipping}</h4>
+                                                {" " + jobs.shipping}</h5>
                                         </ListItem>
                                     })}
                                 </List>
@@ -70,8 +78,8 @@ class WeekView extends Component {
                                 <List>
                                     {this.state.tasks.map(tasks => {
                                         return <ListItem>
-                                            <h2 className="taskName">{tasks.name}</h2>
-                                            <h3 className="taskDescription">{"  " + tasks.description}</h3> <br></br>
+                                            <h4 className="taskName">{tasks.name}</h4>
+                                            <h5 className="taskDescription">{"  " + tasks.description}</h5> <br></br>
                                             {"  Due: " + tasks.dueDate}
                                         </ListItem>
                                     })}

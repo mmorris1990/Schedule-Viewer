@@ -7,7 +7,7 @@ import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
 const moment = require("moment");
 
-class Views extends Component {
+class MainView extends Component {
     state = {
         todayJobs: [],
         tomorrowJobs: [],
@@ -17,6 +17,7 @@ class Views extends Component {
     componentDidMount() {
         this.loadJobs();
         this.loadTasks();
+        this.pageRedirect();
     };
 
     loadJobs = () => {
@@ -40,6 +41,13 @@ class Views extends Component {
                 console.log(err));
     };
 
+    pageRedirect = () => {
+        const timer = setTimeout(() => {
+            window.location = "http://localhost:3000/weekSchedule";
+        }, 7000);
+        return () => clearTimeout(timer);
+    };
+
     render() {
         return (
             <Container>
@@ -47,43 +55,43 @@ class Views extends Component {
                     <Col size="md-9">
                         <Row>
                             <Jumbotron>
-                                <h1>Jobs Due Today</h1>
+                                <h2>Jobs Due Today</h2>
                             </Jumbotron>
                             {this.state.todayJobs.length ? (
                                 <List>
                                     {this.state.todayJobs.map(jobs => {
                                         return <ListItem>
-                                            <h3>SO# {jobs.salesOrder}
-                                                {" " + jobs.company}</h3><br></br>
-                                            <h4>{" Due: " + jobs.dateDue}
+                                            <h4>SO# {jobs.salesOrder}
+                                                {" " + jobs.company}</h4><br></br>
+                                            <h5>{" Due: " + jobs.dateDue}
                                                 {" --- " + jobs.dateNotes}
-                                                {" " + jobs.shipping}</h4>
+                                                {" " + jobs.shipping}</h5>
                                         </ListItem>
                                     })}
                                 </List>
                             ) : (
-                                    <h3>No Results to Display</h3>
+                                    <h4>No Jobs Due Today!</h4>
                                 )}
                         </Row>
 
                         <Row>
                             <Jumbotron>
-                                <h1> Jobs Due Tomorrow </h1>
+                                <h2> Jobs Due Tomorrow </h2>
                             </Jumbotron>
                             {this.state.tomorrowJobs.length ? (
                                 <List>
                                     {this.state.tomorrowJobs.map(jobs => {
                                         return <ListItem>
-                                            <h3>SO# {jobs.salesOrder}
-                                                {" " + jobs.company}</h3><br></br>
-                                            <h4>{" Due: " + jobs.dateDue}
+                                            <h4>SO# {jobs.salesOrder}
+                                                {" " + jobs.company}</h4><br></br>
+                                            <h5>{" Due: " + jobs.dateDue}
                                                 {" --- " + jobs.dateNotes}
-                                                {" " + jobs.shipping}</h4>
+                                                {" " + jobs.shipping}</h5>
                                         </ListItem>
                                     })}
                                 </List>
                             ) : (
-                                    <h3>No Results to Display</h3>
+                                    <h3>No Jobs Due Tomorrow!</h3>
                                 )}
                         </Row>
 
@@ -116,4 +124,4 @@ class Views extends Component {
     }
 };
 
-export default Views;
+export default MainView;
