@@ -8,8 +8,7 @@ import Jumbotron from "../components/Jumbotron";
 import Nav from "../components/Nav/Nav";
 const moment = require("moment");
 
-
-class MainView extends Component {
+class Views extends Component {
     state = {
         todayJobs: [],
         tomorrowJobs: [],
@@ -128,4 +127,4 @@ class MainView extends Component {
     }
 };
 
-export default MainView;
+export default Views;
