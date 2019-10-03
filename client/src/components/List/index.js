@@ -4,7 +4,9 @@ import React from "react";
 
 export function List({ children }) {
   return (
-    <div className="list-overflow-container">
+    <div className="list-overflow-container"
+    style={{background: "none"}}
+    >
       <ul className="list-group">{children}</ul>
     </div>
   );
@@ -12,6 +14,6 @@ export function List({ children }) {
 
 export function ListItem({ children }) {
   return <li
-    style={{marginLeft: 20, display: "inline-block" }}
+    style={{background: "papayawha", borderLeft: "none", borderRight: "none", marginLeft: 20, marginBottom: 5, display: "inline-block" }}
     className="list-group-item">{children}</li>;
 }

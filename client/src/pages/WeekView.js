@@ -52,7 +52,7 @@ class WeekView extends Component {
                         <Col size="md-9">
                             <Row>
                                 <Jumbotron>
-                                    <h2>Jobs Due This Week</h2>
+                                    <h1>Jobs Due This Week</h1>
                                 </Jumbotron>
                                 {this.state.weekJobs.length ? (
                                     <List>
@@ -75,7 +75,7 @@ class WeekView extends Component {
                         <Col size="md-3">
                             <Row>
                                 <Jumbotron>
-                                    <h2>Tasks</h2>
+                                    <h1>Tasks</h1>
                                 </Jumbotron>
                                 {this.state.tasks.length ? (
                                     <List>
@@ -83,7 +83,7 @@ class WeekView extends Component {
                                             return <ListItem>
                                                 <h4 className="taskName">{tasks.name}</h4>
                                                 <h5 className="taskDescription">{"  " + tasks.description}</h5> <br></br>
-                                                {"  Due: " + tasks.dueDate}
+                                                <h5> {"  Due: " + tasks.dueDate} </h5>
                                             </ListItem>
                                         })}
                                     </List>

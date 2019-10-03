@@ -42,22 +42,6 @@ module.exports = function (app, passport) {
         res.json(err);
       });
   });
-  // SEQUELIZE METHOD NOT WORKING?? ----------------------------------
-  //attributes: ["salesOrder", "company", "dateNotes", "dateDue", "shipping"],
-  //     where: { dateDue: date }
-  //   })
-  //     .then(result => {
-  //  app.get("api/schedule/:today", (req, res) => {
-  //   console.log("hi");
-  //   let date = req.params.today.replace("-", "/");
-  //   db.Schedule.findAll({
-  //           res.json(result);
-  //     })
-  //     .catch(err => {
-  //       throw err;
-  //     })
-  // });
-
 
   // GET all tasks by user
   app.get("/api/task/task/:id", function (req, res) {
@@ -163,13 +147,12 @@ module.exports = function (app, passport) {
 
   // process the login form
   app.post('/login', passport.authenticate('local-login', {
-    successRedirect: '/schedule', // redirect to the secure profile section
+    successRedirect: '/schedule', // redirect to the mainView page
     failureRedirect: '/login', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
   }),
     function (req, res) {
-      console.log("hello");
-
+      console.log(loginRoute);
       if (req.body.remember) {
         req.session.cookie.maxAge = 1000 * 60 * 3;
       } else {

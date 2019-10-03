@@ -58,7 +58,7 @@ class MainView extends Component {
                         <Col size="md-9">
                             <Row>
                                 <Jumbotron>
-                                    <h2>Jobs Due Today</h2>
+                                    <h1>Jobs Due Today</h1>
                                 </Jumbotron>
                                 {this.state.todayJobs.length ? (
                                     <List>
@@ -79,7 +79,7 @@ class MainView extends Component {
 
                             <Row>
                                 <Jumbotron>
-                                    <h2> Jobs Due Tomorrow </h2>
+                                    <h1> Jobs Due Tomorrow </h1>
                                 </Jumbotron>
                                 {this.state.tomorrowJobs.length ? (
                                     <List>
@@ -103,15 +103,15 @@ class MainView extends Component {
                         <Col size="md-3">
                             <Row>
                                 <Jumbotron>
-                                    <h2>Tasks</h2>
+                                    <h1>Tasks</h1>
                                 </Jumbotron>
                                 {this.state.tasks.length ? (
                                     <List>
                                         {this.state.tasks.map(tasks => {
                                             return <ListItem>
-                                                <h3 className="taskName">{tasks.name}</h3>
-                                                <h4 className="taskDescription">{"  " + tasks.description}</h4> <br></br>
-                                                {"  Due: " + tasks.dueDate}
+                                                <h4 className="taskName">{tasks.name}</h4>
+                                                <h5 className="taskDescription">{"  " + tasks.description}</h5> <br></br>
+                                                <h5> {"  Due: " + tasks.dueDate}</h5>
                                             </ListItem>
                                         })}
                                     </List>

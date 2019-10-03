@@ -24,6 +24,7 @@ class Login extends Component {
     };
 
     loginUser = (event) => {
+        console.log("loginButton");
         event.preventDefault();
         Axios.post("/login", {
             username: this.state.username,
@@ -39,8 +40,10 @@ class Login extends Component {
     render() {
         return (
             <Container>
-                <div className="container">
-                    <div className="col-sm-6 col-sm-offset-3">
+                <Row style={{height: 200, marginBottom: 200}}>..</Row>
+                <Row>
+                    <Col size="lg-6"></Col>
+                    <Col size="lg-4">
                         <h1><span className="fa fa-sign-in"></span> Login</h1>
 
                         <form>
@@ -57,12 +60,13 @@ class Login extends Component {
                                 <input type="checkbox" className="form-control" name="remember" value="yes" />
                             </div>
 
-                            <button type="submit" className="btn-success"  onClick={this.loginUser}>Login</button>
+                            <button type="submit" className="btn-success" onClick={this.loginUser}>Login</button>
                         </form>
                         <p>Need an account? <NavLink to="/signup"> Signup </NavLink></p>
-                    </div>
-                </div>
-            </Container>
+                    </Col>
+                    <Col size="lg-4"></Col>
+                </Row>
+            </Container >
         )
     }
 }
