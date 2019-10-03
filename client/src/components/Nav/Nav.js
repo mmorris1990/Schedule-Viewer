@@ -3,7 +3,7 @@ import React from "react";
 function Nav() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <a className="navbar-brand" href="/schedule">
+      <a className="navbar-brand" href="/">
         | Finishing Bae's Super Special Schedule System |
       </a>
       

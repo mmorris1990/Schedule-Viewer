@@ -15,7 +15,7 @@ function App() {
           <Route exact path="/schedule" component={MainView} />
           <Route exact path="/weekSchedule" component={WeekView} />
           <Route exact path="/tasks" component={Tasks} />
-        </Switch>
+        </Switch> 
       </div>
     </Router>
   );
