@@ -103,20 +103,20 @@ class MainView extends Component {
                         <Col size="md-3">
                             <Row>
                                 <Jumbotron>
-                                    <h1>Tasks</h1>
+                                    <h2>Tasks</h2>
                                 </Jumbotron>
                                 {this.state.tasks.length ? (
                                     <List>
                                         {this.state.tasks.map(tasks => {
                                             return <ListItem>
-                                                <h2 className="taskName">{tasks.name}</h2>
-                                                <h3 className="taskDescription">{"  " + tasks.description}</h3> <br></br>
+                                                <h3 className="taskName">{tasks.name}</h3>
+                                                <h4 className="taskDescription">{"  " + tasks.description}</h4> <br></br>
                                                 {"  Due: " + tasks.dueDate}
                                             </ListItem>
                                         })}
                                     </List>
                                 ) : (
-                                        <h3>No Results to Display</h3>
+                                        <h3>No Department Tasks</h3>
                                     )}
                             </Row>
 

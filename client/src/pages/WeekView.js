@@ -75,7 +75,7 @@ class WeekView extends Component {
                         <Col size="md-3">
                             <Row>
                                 <Jumbotron>
-                                    <h1>Tasks</h1>
+                                    <h2>Tasks</h2>
                                 </Jumbotron>
                                 {this.state.tasks.length ? (
                                     <List>
