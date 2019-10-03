@@ -1,12 +1,11 @@
 const db = require("../../models");
 const moment = require("moment");
-const jwt = require("jsonwebtoken");
-const jwtVerify = require("../../config/jwt");
+const passport = require("passport");
 
 module.exports = function (app) {
   //------------------------------ FIX ME ------------------------------------
   // // GET the next Week's scheduled jobs
-  app.get("/api/schedule/week/", jwtVerify.confirmToken, jwtVerify.verifyToken, function (req, res) {
+  app.get("/api/schedule/week/", isLoggedIn, function (req, res) {
 
     // Creates an array with the next 7 dates in the correct format
     let week = [1, 2, 3, 4, 5, 6, 7];
@@ -32,7 +31,7 @@ module.exports = function (app) {
 
 
   // GET Today's or Tomorrow's scheduled jobs
-  app.get("/api/schedule/:date", jwtVerify.confirmToken, jwtVerify.verifyToken, function (req, res) {
+  app.get("/api/schedule/:date", isLoggedIn, function (req, res) {
     // Replace '-' with '/' in order to get route and query into correct formats
     let dateFormatted = req.params.date.replace("-", "/");
     db.sequelize.query("SELECT salesOrder, company, dateNotes, dateDue, shipping FROM schedules WHERE dateDue = '" + dateFormatted + "'", { type: db.Sequelize.QueryTypes.SELECT })
@@ -46,7 +45,7 @@ module.exports = function (app) {
   });
 
   // GET all tasks by user
-  app.get("/api/task/task/:id", jwtVerify.confirmToken, jwtVerify.verifyToken, function (req, res) {
+  app.get("/api/task/task/:id", isLoggedIn, function (req, res) {
     //------------------------- Change req.params.id to req.user.id once passport is up
     db.sequelize.query("SELECT name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'task'", { type: db.Sequelize.QueryTypes.SELECT })
       .then(function (result) {
@@ -60,7 +59,7 @@ module.exports = function (app) {
 
 
   // GET all projects by user
-  app.get("/api/task/project/:id", jwtVerify.confirmToken, jwtVerify.verifyToken, function (req, res) {
+  app.get("/api/task/project/:id", isLoggedIn, function (req, res) {
     //------------------------- Change req.params.id to req.user.id once passport is up
     db.sequelize.query("SELECT name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'project'", { type: db.Sequelize.QueryTypes.SELECT })
       .then(function (result) {
@@ -74,7 +73,7 @@ module.exports = function (app) {
 
 
   // UPDATE task by task id
-  app.put("/api/task/:id", jwtVerify.confirmToken, jwtVerify.verifyToken, function (req, res) {
+  app.put("/api/task/:id", isLoggedIn, function (req, res) {
     console.log(req.body);
     db.Task.update({
       name: req.body.name,
@@ -95,7 +94,7 @@ module.exports = function (app) {
 
 
   // CREATE a new task
-  app.post("/api/task/task", jwtVerify.confirmToken, jwtVerify.verifyToken, function (req, res) {
+  app.post("/api/task/task", isLoggedIn, function (req, res) {
     console.log(req.body);
     db.Task.create({
       name: req.body.name,
@@ -116,7 +115,7 @@ module.exports = function (app) {
 
 
   // CREATE a new project
-  app.post("/api/task/project", jwtVerify.confirmToken, jwtVerify.verifyToken, function (req, res) {
+  app.post("/api/task/project", isLoggedIn, function (req, res) {
     console.log(req.body);
     db.Task.create({
       name: req.body.name,
@@ -136,7 +135,7 @@ module.exports = function (app) {
   });
 
   // DELETE a task/project by id
-  app.delete("/api/task/:id", jwtVerify.confirmToken, jwtVerify.verifyToken, function (req, res) {
+  app.delete("/api/task/:id", isLoggedIn, function (req, res) {
     db.Task.destroy({ where: { id: req.params.id } })
       .then(function (result) {
         console.log(result);
@@ -146,4 +145,49 @@ module.exports = function (app) {
         res.json(err);
       });
   });
+
+  // process the signup form
+  app.post('/signup', passport.authenticate('local-signup', {
+    successRedirect: '/', // redirect to the secure profile section
+    failureRedirect: '/signup', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+  }));
+
+  // process the login form
+  app.post('/login', passport.authenticate('local-login', {
+    successRedirect: '/schedule', // redirect to the secure profile section
+    failureRedirect: '/', // redirect back to the signup page if there is an error
+    failureFlash: true // allow flash messages
+  }),
+    function (req, res) {
+      console.log("hello");
+
+      if (req.body.remember) {
+        req.session.cookie.maxAge = 1000 * 60 * 3;
+      } else {
+        req.session.cookie.expires = false;
+      }
+      res.redirect('/search');
+    });
+
+
+  // =====================================
+  // LOGOUT ==============================
+  // =====================================
+  app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+};
+
+// route middleware to make sure
+function isLoggedIn(req, res, next) {
+
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  // if they aren't redirect them to the home page
+  res.redirect('/');
 }
+
