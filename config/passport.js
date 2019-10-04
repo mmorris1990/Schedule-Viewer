@@ -1,111 +1,110 @@
-// config/passport.js
+require('dotenv').config();
+const bcrypt = require('bcrypt');
+const BCRYPT_SALT_ROUNDS = 12;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/user');
 
-// load all the things we need
-var LocalStrategy = require('passport-local').Strategy;
-
-// load up the user model
-var mysql = require('mysql');
-var bcrypt = require('bcrypt-nodejs');
-var env = "development";
-var config = require(__dirname + "/../config/config.json")[env];
-var connection = mysql.createConnection({
-    'host': config.host,
-    'user': config.username,
-    'password': config.password
-});
-connection.query('USE ' + config.database);
-// expose this function to our app using module.exports
-module.exports = function (passport) {
-
-    // =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
-
-    // used to serialize the user for the session
-    passport.serializeUser(function (user, done) {
-        done(null, user.id);
-    });
-
-    // used to deserialize the user
-    passport.deserializeUser(function (id, done) {
-        connection.query("SELECT * FROM users WHERE id = ? ", [id], function (err, rows) {
-            done(err, rows[0]);
-        });
-    });
-
-    // =========================================================================
-    // LOCAL SIGNUP ============================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
-
-    passport.use(
-        'local-signup',
-        new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField: 'username',
-            passwordField: 'password',
-            passReqToCallback: true // allows us to pass back the entire request to the callback
+passport.use(
+    'register',
+    new LocalStrategy(
+        {
+            username: 'username',
+            password: 'password',
+            passReqToCallback: true,
+            session: false,
         },
-            function (req, username, password, done) {
-                // find a user whose email is the same as the forms email
-                // we are checking to see if the user trying to login already exists
-                connection.query("SELECT * FROM Users WHERE username = ?", [username], function (err, rows) {
-                    if (err)
-                        return done(err);
-                    if (rows.length) {
-                        return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
-                    } else {
-                        // if there is no user with that username
-                        // create the user
-                        var newUserMysql = {
-                            username: username,
-                            password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
-                        };
+        (req, username, password, done) => {
+            console.log(username);
+            console.log(req.body.email);
 
-                        var insertQuery = "INSERT INTO Users ( username, password ) values (?,?)";
-                        connection.query(insertQuery, [newUserMysql.username, newUserMysql.password], function (err, rows) {
-                            newUserMysql.id = rows.insertId;
-
-                            return done(null, newUserMysql);
+            try {
+                User.findOne({
+                    "username": username
+                }).then(user => {
+                    if (user != null) {
+                        console.log('username or email already taken');
+                        return done(null, false, {
+                            message: 'username or email already taken',
                         });
                     }
+                    bcrypt.hash(password, BCRYPT_SALT_ROUNDS).then(hashedPassword => {
+                        User.create({
+                            username,
+                            password: hashedPassword
+                        }).then(user => {
+                            console.log('user created');
+                            return done(null, user);
+                        });
+                    });
                 });
-            })
-    );
+            } catch (err) {
+                return done(err);
+            }
+        },
+    ),
+);
 
-    // =========================================================================
-    // LOCAL LOGIN =============================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
-
-    passport.use(
-        'local-login',
-        new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
+passport.use(
+    'login',
+    new LocalStrategy(
+        {
             usernameField: 'username',
             passwordField: 'password',
-            passReqToCallback: true // allows us to pass back the entire request to the callback
+            session: false,
         },
-            function (req, username, password, done) {
-                console.log("loginPassport");
-                connection.query("SELECT * FROM Users WHERE username = ?", [username], function (err, rows) {
-                    if (err)
-                        return done(err);
-                    if (!rows.length) {
-                        return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+        (username, password, done) => {
+            try {
+                User.findOne({ "username": username }).then(user => {
+                    if (user === null) {
+                        return done(null, false, { message: 'bad username' });
                     }
-
-                    // if the user is found but the password is wrong
-                    if (!bcrypt.compareSync(password, rows[0].password))
-                        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-
-                    // all is well, return successful user
-                    return done(null, rows[0]);
+                    bcrypt.compare(password, user.password).then(response => {
+                        if (response !== true) {
+                            console.log('passwords do not match');
+                            return done(null, false, { message: 'passwords do not match' });
+                        }
+                        console.log('user found & authenticated');
+                        return done(null, user);
+                    });
                 });
-            })
-    );
-};
+            } catch (err) {
+                done(err);
+            }
+        },
+    ),
+);
+
+passport.use("google",
+    new GoogleStrategy(
+        {
+            clientID: "process.env.GOOGE_CLIENT_ID",
+            clientSecret: "process.env.GOOGLE_CLIENT_SECRET",
+            callbackURL: "/auth/google/callback",
+            proxy: true
+        },
+        (accessToken, refreshToken, profile, done) => {
+            console.log(profile);
+            console.log("done" + done)
+            User.findOne({ googleId: profile.id }).then(existingUser => {
+                if (existingUser) {
+                    console.log("found user");
+                    return done(null, existingUser)
+                } else {
+                    console.log("creating a new user");
+                    new User({
+                        googleId: profile.id,
+                        username: profile.displayName,
+                        email: profile.emails[0].value
+                    })
+                        .save()
+                        .then((user) => {
+                            console.log("done");
+                            return done(null, user)
+                        });
+                }
+            });
+        }
+    )
+);
