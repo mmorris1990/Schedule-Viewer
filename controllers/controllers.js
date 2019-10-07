@@ -47,7 +47,7 @@ module.exports = {
     },
 
     // GET all tasks by user
-    getTask: (req, res) => {
+    getTasks: (req, res) => {
         app.get("/api/task/task/:id", () => {
             db.sequelize.query("SELECT name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'task'", { type: db.Sequelize.QueryTypes.SELECT })
                 .then(function (result) {
@@ -105,7 +105,6 @@ module.exports = {
                 dueDate: req.body.dueDate,
                 description: req.body.description,
                 type: req.body.type,
-                //------------------------- Change req.body.UserId to req.user.id once passport is up
                 UserId: req.body.UserId
             })
                 .then(function (result) {

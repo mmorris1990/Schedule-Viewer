@@ -18,7 +18,7 @@ class MainView extends Component {
     componentDidMount() {
         this.loadJobs();
         this.loadTasks();
-        this.pageRedirect();
+        // this.pageRedirect();
     };
 
     loadJobs = () => {

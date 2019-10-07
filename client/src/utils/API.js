@@ -27,10 +27,10 @@ export default {
         return axios.post("/api/task/task", taskData);
     },
 
-    // Create new project
-    newProject: projectData => {
-        return axios.post("/api/task/project", projectData);
-    },
+    // // Create new project
+    // newProject: projectData => {
+    //     return axios.post("/api/task/project", projectData);
+    // },
 
     // Update task/project by id
     editTask: id => {
