@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-expressions */
 import React, { Component } from "react";
 import Axios from "axios";
-import { NavLink } from "react-router-dom";
-import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
-import Jumbotron from "../components/Jumbotron";
+import { Redirect, NavLink } from "react-router-dom";
+import { Col, Row, Container } from "../../components/Grid";
+import { List, ListItem } from "../../components/List";
+import Jumbotron from "../../components/Jumbotron";
+import "./login.css"
 const moment = require("moment");
 
 class Login extends Component {
@@ -26,7 +27,7 @@ class Login extends Component {
     loginUser = (event) => {
         console.log("loginButton");
         event.preventDefault();
-        Axios.post("/login", {
+        Axios.post("/loginUser", {
             username: this.state.username,
             password: this.state.password,
         }).then((data) => {
@@ -37,10 +38,18 @@ class Login extends Component {
             console.log(err)
         })
     }
+
+    googleLogin = (event) => {
+        event.preventDefault();
+        Axios.get("/auth/google").then(res => {
+            console.log(res)
+        })
+    }
+
     render() {
-        return (
-            <Container>
-                <Row style={{height: 200, marginBottom: 200}}>..</Row>
+        if (!this.state.loggedIn) {
+            return <Container>
+                <Row style={{ height: 200, marginBottom: 200 }}>..</Row>
                 <Row>
                     <Col size="lg-6"></Col>
                     <Col size="lg-4">
@@ -63,11 +72,30 @@ class Login extends Component {
                             <button type="submit" className="btn-success" onClick={this.loginUser}>Login</button>
                         </form>
                         <p>Need an account? <NavLink to="/signup"> Signup </NavLink></p>
+                        <div className="google-btn-container">
+                            <a href="/auth/google">
+                                <div className="google-btn">
+                                    <div className="google-icon-wrapper">
+                                        <img
+                                            className="google-icon"
+                                            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                                            alt="signin"
+                                        />
+                                    </div>
+                                    <p className="btn-text">
+                                        <b>Log in with Google</b>
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
                     </Col>
                     <Col size="lg-4"></Col>
                 </Row>
             </Container >
-        )
+        }
+        else {
+            return <Redirect to={{ pathname: "/schedule", state: { loggedIn: true } }} />
+        }
     }
 }
 

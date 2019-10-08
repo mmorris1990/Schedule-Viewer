@@ -9,6 +9,7 @@ export default {
 
     // Get jobs by date
     getJobs: function (date) {
+        console.log("get-front")
         return axios.get("/api/schedule/" + date);
     },
 

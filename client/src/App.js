@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import MainView from "./pages/MainView";
 import WeekView from "./pages/WeekView";
 import Tasks from "./pages/Tasks";
-import Login from "./pages/Login";
+import Login from "./pages/Login/Login";
 import Signup from "./components/Signup/Signup";
 
 function App() {
