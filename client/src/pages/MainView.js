@@ -51,9 +51,9 @@ class MainView extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{width:"100%" , height: "100vh"}}>
                 <Nav />
-                <Container>
+                <Container style={{height: "inherit"}}>
                     <Row>
                         <Col size="md-9">
                             <Row>

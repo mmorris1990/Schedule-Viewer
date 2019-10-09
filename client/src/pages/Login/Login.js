@@ -49,13 +49,14 @@ class Login extends Component {
     render() {
         if (!this.state.loggedIn) {
             return <Container>
-                <Row style={{ height: 200, marginBottom: 200 }}>..</Row>
+                <Row className="header">
+                    <h1 className="header">Finishing Bae's Super Special Schedule System</h1>
+                </Row>
                 <Row>
-                    <Col size="lg-6"></Col>
+                    <Col size="lg-4"></Col>
                     <Col size="lg-4">
-                        <h1><span className="fa fa-sign-in"></span> Login</h1>
 
-                        <form>
+                        {/*<form>
                             <div className="form-group">
                                 <label>Username</label>
                                 <input type="text" className="form-control" name="username" value={this.state.username} onChange={this.handleChange} />
@@ -71,7 +72,7 @@ class Login extends Component {
 
                             <button type="submit" className="btn-success" onClick={this.loginUser}>Login</button>
                         </form>
-                        <p>Need an account? <NavLink to="/signup"> Signup </NavLink></p>
+                        <p>Need an account? <NavLink to="/signup"> Signup </NavLink></p> */}
                         <div className="google-btn-container">
                             <a href="/auth/google">
                                 <div className="google-btn">
