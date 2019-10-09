@@ -2,14 +2,19 @@ const Sequelize = require("sequelize");
 
 module.exports = function (sequelize, DataTypes) {
   const User = sequelize.define("User", {
-    Username: {
+    googleId: {
+      type: DataTypes.STRING
+    },
+    username: {
       type: DataTypes.STRING,
       allownull: false,
       unique: true
     },
-    Password: {
-      type: DataTypes.STRING,
-      allownull: false
+    password: {
+      type: DataTypes.STRING
+    },
+    email: {
+      type: DataTypes.STRING
     },
     createdAt: Sequelize.DATE,
     updatedAt: Sequelize.DATE

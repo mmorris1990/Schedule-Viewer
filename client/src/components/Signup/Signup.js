@@ -31,7 +31,7 @@ class Signup extends Component {
             this.setState({ badPassword: true })
         }
         else {
-            Axios.post("/signup", {
+            Axios.post("/registerUser", {
                 username: this.state.username,
                 password: this.state.password,
             }).then((data) => {
