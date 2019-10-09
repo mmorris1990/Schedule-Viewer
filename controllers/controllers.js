@@ -94,7 +94,7 @@ module.exports = {
             dueDate: req.body.dueDate,
             description: req.body.description,
             type: req.body.type,
-            UserId: req.params.id
+            UserId: "1"
         })
             .then(function (result) {
                 console.log(result);

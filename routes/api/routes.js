@@ -22,7 +22,7 @@ router.route("/task/project/:id").get(controllers.getProjects);
 router.route("/task/project/:id").put(controllers.update);
 
 // Matches with "api/task/task"
-router.route("/task/task/:id").post(controllers.create);
+router.route("/task/task").post(controllers.create);
 
 // Matches with "api/task/:id"
 router.route("/task/:id").delete(controllers.delete);

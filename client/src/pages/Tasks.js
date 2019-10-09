@@ -59,7 +59,8 @@ class Tasks extends Component {
                 name: this.state.name,
                 dueDate: this.state.dueDate,
                 description: this.state.description,
-                type: this.state.type
+                type: this.state.type,
+                UserId: "1"
             })
                 .then(res => this.loadTasks(), this.loadProjects())
                 .catch(err => console.log(err));
@@ -123,7 +124,7 @@ class Tasks extends Component {
                                 <FormInput title="name" name="name" value={this.state.name} onChange={this.handleInputChange} />
                                 <FormInput title="dueDate" name="dueDate" value={this.state.dueDate} onChange={this.handleInputChange} />
                                 <FormInput title="type" name="type" value={this.state.type} onChange={this.handleInputChange} />
-                                <FormInput title="description" name="description" value={this.state.type} onChange={this.handleInputChange} />
+                                <FormInput title="description" name="description" value={this.state.description} onChange={this.handleInputChange} />
                                 <button type="submit" onClick={this.handleFormSubmit}>Submit</button>
                             </form>
                         </Col>
