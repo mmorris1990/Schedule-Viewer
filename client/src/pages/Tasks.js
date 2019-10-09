@@ -6,6 +6,7 @@ import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
 import Nav from "../components/Nav/Nav";
 import DeleteBtn from "../components/DeleteBtn";
+import FormInput from "../components/FormInput";
 
 class Tasks extends Component {
     state = {
@@ -91,7 +92,7 @@ class Tasks extends Component {
                                     <h4>No Upcoming Projects!</h4>
                                 )}
                         </Col>
-                        
+
                         {/* Tasks Display */}
                         <Col size="md-6">
                             <Jumbotron>
@@ -104,7 +105,7 @@ class Tasks extends Component {
                                             <h4 className="taskName">{tasks.name}</h4>
                                             <h5 className="taskDescription">{"  " + tasks.description}</h5> <br></br>
                                             <h5> {"  Due: " + tasks.dueDate}</h5>
-                                            <DeleteBtn value={this.state.tasks.id} id ={tasks.id} onClick={() => this.deleteTask(tasks.id)} />
+                                            <DeleteBtn value={this.state.tasks.id} id={tasks.id} onClick={() => this.deleteTask(tasks.id)} />
                                         </ListItem>
                                     })}
                                 </List>
@@ -117,7 +118,15 @@ class Tasks extends Component {
 
                     {/* Form Display */}
                     <Row>
-
+                        <Col size="md-12">
+                            <form>
+                                <FormInput title="name" name="name" value={this.state.name} onChange={this.handleInputChange} />
+                                <FormInput title="dueDate" name="dueDate" value={this.state.dueDate} onChange={this.handleInputChange} />
+                                <FormInput title="type" name="type" value={this.state.type} onChange={this.handleInputChange} />
+                                <FormInput title="description" name="description" value={this.state.type} onChange={this.handleInputChange} />
+                                <button type="submit" onClick={this.handleFormSubmit}>Submit</button>
+                            </form>
+                        </Col>
                     </Row>
                 </Container>
             </div>

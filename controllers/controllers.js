@@ -44,7 +44,7 @@ module.exports = {
 
     // GET all tasks by user
     getTasks: (req, res) => {
-        db.sequelize.query("SELECT id, name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'task'", { type: db.Sequelize.QueryTypes.SELECT })
+        db.sequelize.query("SELECT id, name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'task' ORDER BY dueDate", { type: db.Sequelize.QueryTypes.SELECT })
             .then(function (result) {
                 console.log(result);
                 res.json(result);
@@ -56,7 +56,7 @@ module.exports = {
 
     // GET all projects by user
     getProjects: (req, res) => {
-        db.sequelize.query("SELECT id, name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'project'", { type: db.Sequelize.QueryTypes.SELECT })
+        db.sequelize.query("SELECT id, name, dueDate, description FROM tasks WHERE UserId = " + req.params.id + " AND type = 'project' ORDER BY dueDate", { type: db.Sequelize.QueryTypes.SELECT })
             .then(function (result) {
                 console.log(result);
                 res.json(result);
