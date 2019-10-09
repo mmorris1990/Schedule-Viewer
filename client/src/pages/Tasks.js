@@ -123,7 +123,14 @@ class Tasks extends Component {
                             <form>
                                 <FormInput title="name" name="name" value={this.state.name} onChange={this.handleInputChange} />
                                 <FormInput title="dueDate" name="dueDate" value={this.state.dueDate} onChange={this.handleInputChange} />
-                                <FormInput title="type" name="type" value={this.state.type} onChange={this.handleInputChange} />
+                                {/* <FormInput title="type" name="type" value={this.state.type} onChange={this.handleInputChange} /> */}
+                                <label>
+                                    Select Project or Dept. Tasks
+                                    <select title="type" name="type" value={this.state.type} onChange={this.handleInputChange}>
+                                        <option value="project">Project</option>
+                                        <option value="Task">Task</option>
+                                    </select>
+                                </label>
                                 <FormInput title="description" name="description" value={this.state.description} onChange={this.handleInputChange} />
                                 <button type="submit" onClick={this.handleFormSubmit}>Submit</button>
                             </form>
