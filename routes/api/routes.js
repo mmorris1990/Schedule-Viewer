@@ -4,6 +4,8 @@ const controllers = require("../../controllers/controllers");
 const jwt = require("jsonwebtoken");
 const jwtVerify = require("../../config/jwt");
 
+// jwtVerify.confirmToken, jwtVerify.verifyToken, 
+
 // Matches with "/api/schedule/week"
 router.route("/schedule/week").get(controllers.getWeek);
 

@@ -89,7 +89,9 @@ app.get(
 
 app.get(
   "/auth/google/callback", (req, res, next) => {
+    console.log("callback");
     passport.authenticate("google", (err, user, info) => {
+      console.log("user" +user);
       const token = jwt.sign({ id: user.id }, jwtSecret.secret, {
         expiresIn: 60 * 60,
       });

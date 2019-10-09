@@ -4,7 +4,7 @@ const BCRYPT_SALT_ROUNDS = 12;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('../models/user');
+const db = require('../models');
 
 passport.use(
     'register',
@@ -20,7 +20,7 @@ passport.use(
             console.log(req.body.email);
 
             try {
-                User.findOne({
+                db.User.findOne({
                     "username": username
                 }).then(user => {
                     if (user != null) {
@@ -56,7 +56,7 @@ passport.use(
         },
         (username, password, done) => {
             try {
-                User.findOne({ "username": username }).then(user => {
+                db.User.findOne({ "username": username }).then(user => {
                     if (user === null) {
                         return done(null, false, { message: 'bad username' });
                     }
@@ -85,9 +85,8 @@ passport.use("google",
             proxy: true
         },
         (accessToken, refreshToken, profile, done) => {
-            console.log(profile);
-            console.log("done" + done)
-            User.findOne({ googleId: profile.id }).then(existingUser => {
+            console.log("passport profile id " +profile.id);
+            db.User.findOne({ googleId: profile.id }).then((existingUser) => {
                 if (existingUser) {
                     console.log("found user");
                     return done(null, existingUser)
@@ -104,7 +103,10 @@ passport.use("google",
                             return done(null, user)
                         });
                 }
-            });
+            })
+            .catch((error) => {
+                console.log("error here" +error);
+            })
         }
     )
 );
