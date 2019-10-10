@@ -12,8 +12,17 @@
     body {
       height: 100vh;
       min-height: 100vh;
-      background-color:lightgrey;
+      background-color: lightgrey;
 
+    }
+
+    .fade-in {
+      opacity: 0;
+    }
+
+    .fade-in.visible {
+      transition: opacity 1s ease-in;
+      opacity: 1;
     }
   </style>
 </head>
