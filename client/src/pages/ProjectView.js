@@ -1,29 +1,28 @@
 /* eslint-disable no-unused-expressions */
 import React, { Component } from "react";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import Jumbotron from "../components/Jumbotron";
 import Nav from "../components/Nav/Nav";
 const moment = require("moment");
 
-class WeekView extends Component {
+class ProjectView extends Component {
     state = {
-        weekJobs: [],
+        projects: [],
         tasks: []
     };
 
     componentDidMount() {
-        this.loadJobs();
+        this.loadProjects();
         this.loadTasks();
         this.pageRedirect();
     };
 
-    loadJobs = () => {
-        API.getWeekJobs()
+    loadProjects = () => {
+        API.getProjects("/1")
             .then(res =>
-                this.setState({ weekJobs: res.data }))
+                this.setState({ projects: res.data }))
             .catch(err =>
                 console.log(err));
     };
@@ -38,7 +37,7 @@ class WeekView extends Component {
 
     pageRedirect = () => {
         const timer = setTimeout(() => {
-            window.location = "http://localhost:3000/projects";
+            window.location = "http://localhost:3000/schedule";
         }, 8000);
         return () => clearTimeout(timer);
     };
@@ -49,20 +48,18 @@ class WeekView extends Component {
                 <Nav />
                 <Container>
                     <Row>
-                        <Col size="md-9">
+                        <Col size="md-6">
                             <Row>
                                 <Jumbotron>
-                                    <h1>Jobs Due This Week</h1>
+                                    <h1>Upcoming Projects</h1>
                                 </Jumbotron>
-                                {this.state.weekJobs.length ? (
+                                {this.state.projects.length ? (
                                     <List>
-                                        {this.state.weekJobs.map(jobs => {
+                                        {this.state.projects.map(projects => {
                                             return <ListItem>
-                                                <h4>SO# {jobs.salesOrder}
-                                                    {" " + jobs.company}</h4><br></br>
-                                                <h5>{" Due: " + jobs.dateDue}
-                                                    {" --- " + jobs.dateNotes}
-                                                    {" " + jobs.shipping}</h5>
+                                                <h4 className="projectName">{projects.name}</h4>
+                                                <h5 className="projectDescription">{"  " + projects.description}</h5> <br></br>
+                                                <h5> {"  Due: " + projects.dueDate} </h5>
                                             </ListItem>
                                         })}
                                     </List>
@@ -70,9 +67,10 @@ class WeekView extends Component {
                                         <h3>No Results to Display</h3>
                                     )}
                             </Row>
+
                         </Col>
 
-                        <Col size="md-3">
+                        <Col size="md-6">
                             <Row>
                                 <Jumbotron>
                                     <h1>Tasks</h1>
@@ -100,4 +98,4 @@ class WeekView extends Component {
     }
 };
 
-export default WeekView;
+export default ProjectView;

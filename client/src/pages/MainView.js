@@ -18,7 +18,7 @@ class MainView extends Component {
     componentDidMount() {
         this.loadJobs();
         this.loadTasks();
-        // this.pageRedirect();
+        this.pageRedirect();
     };
 
     loadJobs = () => {
@@ -45,7 +45,7 @@ class MainView extends Component {
     pageRedirect = () => {
         const timer = setTimeout(() => {
             window.location = "http://localhost:3000/weekSchedule";
-        }, 7000);
+        }, 8000);
         return () => clearTimeout(timer);
     };
 
