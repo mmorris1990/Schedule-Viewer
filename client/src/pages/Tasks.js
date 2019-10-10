@@ -12,10 +12,10 @@ class Tasks extends Component {
     state = {
         tasks: [],
         projects: [],
-        name: "",
-        dueDate: "",
+        name: "name",
+        dueDate: "10/14",
         type: "",
-        description: ""
+        description: "description"
     }
 
     componentDidMount() {
@@ -51,6 +51,15 @@ class Tasks extends Component {
             [name]: value
         });
     };
+
+    // Clear input box onClick
+    // clearInput = event => {
+    //     const { name, value } = event.target;
+
+    //     this.setState({
+    //         value: ""
+    //     })
+    // };
 
     handleFormSubmit = event => {
         event.preventDefault();
@@ -120,19 +129,25 @@ class Tasks extends Component {
                     {/* Form Display */}
                     <Row>
                         <Col size="md-12">
-                            <form>
-                                <FormInput title="name" name="name" value={this.state.name} onChange={this.handleInputChange} />
-                                <FormInput title="dueDate" name="dueDate" value={this.state.dueDate} onChange={this.handleInputChange} />
-                                {/* <FormInput title="type" name="type" value={this.state.type} onChange={this.handleInputChange} /> */}
-                                <label>
-                                    Select Project or Dept. Tasks
-                                    <select title="type" name="type" value={this.state.type} onChange={this.handleInputChange}>
-                                        <option value="project">Project</option>
-                                        <option value="Task">Task</option>
-                                    </select>
-                                </label>
-                                <FormInput title="description" name="description" value={this.state.description} onChange={this.handleInputChange} />
-                                <button type="submit" onClick={this.handleFormSubmit}>Submit</button>
+                            <form className="form"
+                                style={{ background: "salmon", padding: "20px", "margin-top": "15px", "margin-bottom": "15px", "border-radius": "15px", width: "inherit" }}>
+                                <Row>
+                                    <FormInput title="Name" name="name" value={this.state.name} onChange={this.handleInputChange} />
+                                    <FormInput title="Due Date" name="dueDate" value={this.state.dueDate} onChange={this.handleInputChange} />
+                                    <FormInput title="Description" name="description" value={this.state.description} onChange={this.handleInputChange} />
+                                </Row>
+                                <Row>
+                                    <label style={{ "margin-left": "20px" }}>
+                                        <h4>Select Project or Dept. Tasks </h4>
+                                        <select class="form-control" title="type" name="type" value={this.state.type} onChange={this.handleInputChange}>
+                                            <option value="project">Project</option>
+                                            <option value="Task">Task</option>
+                                        </select>
+                                    </label>
+                                    <button type="submit" class="btn btn-light"
+                                        style={{ height: "40px", "margin-left": "500px", "margin-top": "40px" }}
+                                        onClick={this.handleFormSubmit}>Submit</button>
+                                </Row>
                             </form>
                         </Col>
                     </Row>
