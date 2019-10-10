@@ -26,10 +26,10 @@ app.use('*', function (req, res, next) {
 app.options('*', cors());
 
 // Serve up static assets (usually on heroku)
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-}
-// Add routes, both API and view
+app.use(express.static("client/build"));
+// if (process.env.NODE_ENV === "production") {
+// }
+// // Add routes, both API and view
 
 app.post('/registerUser', (req, res, next) => {
   passport.authenticate('register', (err, user, info) => {
