@@ -15,6 +15,10 @@ function Nav() {
       <a className="navbar-brand" href="/tasks">
         | Edit Tasks |
       </a>
+
+      <a id="logout" className="navbar-brand" href="/">
+        | Logout |
+      </a>
     </nav>
   );
 }

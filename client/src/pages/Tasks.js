@@ -14,7 +14,7 @@ class Tasks extends Component {
         projects: [],
         name: "name",
         dueDate: "10/14",
-        type: "",
+        type: "Project",
         description: "description"
     }
 
@@ -71,7 +71,7 @@ class Tasks extends Component {
                 type: this.state.type,
                 UserId: "1"
             })
-                .then(res => this.loadTasks(), this.loadProjects())
+                .then(res => this.loadTasks(), this.loadProjects(), alert("New " + this.state.type + " Added!"))
                 .catch(err => console.log(err));
         }
     };
@@ -130,22 +130,22 @@ class Tasks extends Component {
                     <Row>
                         <Col size="md-12">
                             <form className="form"
-                                style={{ background: "salmon", padding: "20px", "margin-top": "15px", "margin-bottom": "15px", "border-radius": "15px", width: "inherit" }}>
+                                style={{ background: "salmon", padding: "20px", marginTop: "15px", marginBottom: "15px", borderRadius: "15px", width: "inherit" }}>
                                 <Row>
                                     <FormInput title="Name" name="name" value={this.state.name} onChange={this.handleInputChange} />
                                     <FormInput title="Due Date" name="dueDate" value={this.state.dueDate} onChange={this.handleInputChange} />
                                     <FormInput title="Description" name="description" value={this.state.description} onChange={this.handleInputChange} />
                                 </Row>
                                 <Row>
-                                    <label style={{ "margin-left": "20px" }}>
+                                    <label style={{ marginLeft: "20px" }}>
                                         <h4>Select Project or Dept. Tasks </h4>
-                                        <select class="form-control" title="type" name="type" value={this.state.type} onChange={this.handleInputChange}>
+                                        <select className="form-control" title="type" name="type" value={this.state.type} onChange={this.handleInputChange}>
                                             <option value="project">Project</option>
                                             <option value="Task">Task</option>
                                         </select>
                                     </label>
-                                    <button type="submit" class="btn btn-light"
-                                        style={{ height: "40px", "margin-left": "500px", "margin-top": "40px" }}
+                                    <button type="submit" className="btn btn-light"
+                                        style={{ height: "40px", marginLeft: "500px", marginTop: "40px" }}
                                         onClick={this.handleFormSubmit}>Submit</button>
                                 </Row>
                             </form>
