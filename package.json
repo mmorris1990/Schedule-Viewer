@@ -44,7 +44,7 @@
     "nodemon": "^1.19.2",
     "passport": "^0.4.0",
     "passport-google-oauth20": "^2.0.0",
-    "passport-jwt": "^4.0.0",
+    "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "sequelize": "^5.19.0"
   }
